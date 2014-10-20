@@ -1,0 +1,14 @@
+html, body { height: 100%; }
+
+.spinner {
+	width: 40px;
+	border: 0;
+	text-align: right;
+	color: #393939;
+	font-weight: bold;
+	border-bottom: 1px dotted #393939;
+
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}

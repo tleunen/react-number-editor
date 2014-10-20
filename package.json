@@ -1,0 +1,37 @@
+{
+  "name": "react-number-editor",
+  "version": "0.0.1",
+  "description": "number-editor component for react",
+  "main": "src/client.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tleunen/react-number-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tleunen/react-number-editor/issues"
+  },
+  "homepage": "https://github.com/tleunen/react-number-editor",
+  "keywords": [
+    "react",
+    "react-component",
+    "number",
+    "editor",
+    "dom",
+    "element"
+  ],
+  "author": "Tommy Leunen <tommy.leunen@gmail.com> (http://tommyleunen.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "clamp": "^1.0.1",
+    "react": "^0.11.2",
+    "react-clickdrag-mixin": "^1.0.1"
+  },
+  "devDependencies": {
+    "brfs": "^1.2.0",
+    "insert-css": "^0.2.0",
+    "reactify": "^0.14.0"
+  },
+  "scripts": {
+    "demo": "beefy demo/index.js --open -- -t reactify -t brfs"
+  }
+}
