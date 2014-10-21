@@ -24,7 +24,7 @@
   "dependencies": {
     "clamp": "^1.0.1",
     "react": "^0.11.2",
-    "react-clickdrag-mixin": "^1.0.1"
+    "react-clickdrag-mixin": "^1.0.2"
   },
   "devDependencies": {
     "brfs": "^1.2.0",

@@ -24,7 +24,6 @@ var NumberEditor = React.createClass({
         stepModifier: React.PropTypes.number,
         decimals: React.PropTypes.number,
         initialValue: React.PropTypes.number,
-        cursor: React.PropTypes.bool,
         className: React.PropTypes.string,
         onValueChange: React.PropTypes.func
     },
@@ -37,7 +36,6 @@ var NumberEditor = React.createClass({
             stepModifier: 10,
             decimals: 0,
             initialValue: 0,
-            cursor: true,
             className: '',
             onValueChange: function() {}
         };
@@ -58,9 +56,9 @@ var NumberEditor = React.createClass({
     },
 
     _changeValue: function(value) {
-        var formattedValue = value.toFixed(this.props.decimals);
         // Using the formatted value converted as a number assure that value == valueStr (with the right number of decimals)
-        var newVal = clamp(Number(formattedValue), this.props.min, this.props.max);
+        var newVal = clamp(Number(value.toFixed(this.props.decimals)), this.props.min, this.props.max);
+        var formattedValue = newVal.toFixed(this.props.decimals);
 
         this.setState({
             value: newVal,
@@ -94,9 +92,15 @@ var NumberEditor = React.createClass({
             this._changeValue(value - step);
         }
         else if(key == KEYS.ENTER) {
-            this.setState({
-                startEditing: !this.state.startEditing
-            });
+            if(this.state.startEditing) {
+                // stop editing + save value
+                this._onBlur();
+            }
+            else {
+                this.setState({
+                    startEditing: true
+                });
+            }
         }
     },
 
