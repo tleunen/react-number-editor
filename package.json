@@ -1,7 +1,7 @@
 {
   "name": "react-number-editor",
   "version": "1.0.1",
-  "description": "Number editor (textfield) component for react",
+  "description": "Custom number editor (text field) react component",
   "main": "index.js",
   "repository": {
     "type": "git",
