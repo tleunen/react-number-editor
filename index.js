@@ -162,7 +162,7 @@ var NumberEditor = React.createClass({
                 onDoubleClick: this._onDoubleClick,
                 onChange: this._onChange,
                 onBlur: this._onBlur
-            })
+            });
         );
     }
 });
