@@ -42,6 +42,7 @@ var NumberEditor = React.createClass({
         return {
             startEditing: false,
             startDragging: false,
+            wasUsingSpecialKeys: false,
             value: this.props.initialValue,
             valueStr: String(this.props.initialValue),
             dragStartValue: this.props.initialValue
@@ -66,9 +67,9 @@ var NumberEditor = React.createClass({
     },
 
     _getStepValue: function(e, step) {
-        if (e.metaKey || e.ctrlKey)
+        if(e.metaKey || e.ctrlKey)
             step /= this.props.stepModifier;
-        else if (e.shiftKey)
+        else if(e.shiftKey)
             step *= this.props.stepModifier;
 
         return step;
@@ -123,7 +124,7 @@ var NumberEditor = React.createClass({
         });
     },
 
-    _onDragStart: function(pos) {
+    _onDragStart: function(e, pos) {
         this.setState({
             startDragging: true,
             dragStartValue: this.state.value
@@ -135,7 +136,20 @@ var NumberEditor = React.createClass({
         });
     },
     _onDragMove: function(e, deltaPos) {
-        e.preventDefault()
+        e.preventDefault();
+
+        // If a special key is used and wasn't use before,
+        // we have to set the new Mouse Position and new Drag Start value
+        var isUsingSpecialKeys = e.metaKey || e.ctrlKey || e.shiftKey;
+        if(isUsingSpecialKeys != this.state.wasUsingSpecialKeys) {
+            this.setMousePosition(e.clientX, e.clientY);
+            this.setState({
+                wasUsingSpecialKeys: isUsingSpecialKeys,
+                dragStartValue: this.state.value
+            })
+            return;
+        }
+
 
         var step = this._getStepValue(e, this.props.step);
         this._changeValue(this.state.dragStartValue + deltaPos.x * (step/2));
@@ -151,19 +165,17 @@ var NumberEditor = React.createClass({
 
         document.body.style.cursor = (this.state.startDragging) ? "ew-resize" : "auto";
 
-        return (
-            React.DOM.input({
-                type: 'text',
-                className: this.props.className,
-                readOnly: readOnly,
-                value: this.state.valueStr,
-                style: { cursor: cursor },
-                onKeyDown: this._onKeyDown,
-                onDoubleClick: this._onDoubleClick,
-                onChange: this._onChange,
-                onBlur: this._onBlur
-            })
-        );
+        return React.DOM.input({
+            type: 'text',
+            className: this.props.className,
+            readOnly: readOnly,
+            value: this.state.valueStr,
+            style: { cursor: cursor },
+            onKeyDown: this._onKeyDown,
+            onDoubleClick: this._onDoubleClick,
+            onChange: this._onChange,
+            onBlur: this._onBlur
+        });
     }
 });
 
