@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 "use strict";
 
 var ReactClickDragMixin = require('react-clickdrag-mixin');
@@ -155,17 +152,17 @@ var NumberEditor = React.createClass({
         document.body.style.cursor = (this.state.startDragging) ? "ew-resize" : "auto";
 
         return (
-            <input
-                type="text"
-                className={this.props.className}
-                readOnly={readOnly}
-                value={this.state.valueStr}
-                style={{cursor: cursor}}
-                onKeyDown={this._onKeyDown}
-                onDoubleClick={this._onDoubleClick}
-                onChange={this._onChange}
-                onBlur={this._onBlur}
-            />
+            React.DOM.input({
+                type: 'text',
+                className: this.props.className,
+                readOnly: readOnly,
+                value: this.state.valueStr,
+                style: { cursor: cursor },
+                onKeyDown: this._onKeyDown,
+                onDoubleClick: this._onDoubleClick,
+                onChange: this._onChange,
+                onBlur: this._onBlur
+            })
         );
     }
 });
