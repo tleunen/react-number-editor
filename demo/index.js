@@ -1,9 +1,5 @@
-/**
- * @jsx React.DOM
- */
-
-var NumberEditor = require('../');
 var React = require('react');
+var NumberEditor = require('../');
 
 var fs = require('fs');
 var style = fs.readFileSync(__dirname+'/style.css', 'utf8');
@@ -15,7 +11,7 @@ function logValue(value) {
 }
 
 
-React.renderComponent(
+React.render(
     <NumberEditor className="spinner" min={0} max={1} step={0.01} decimals={2} onValueChange={logValue} />,
     document.body
 );

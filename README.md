@@ -15,9 +15,10 @@ A [react](https://github.com/facebook/react) component to easily use number inpu
 ## Example
 
 ```js
+var React = require('react');
 var NumberEditor = require('react-number-editor');
 
-React.renderComponent(
+React.render(
     <NumberEditor min={0} max={1} step={0.01} decimals={2} onValueChange={onValueChange} />,
     document.body
 );

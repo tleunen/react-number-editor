@@ -20,17 +20,21 @@
     "dom",
     "element"
   ],
-  "author": "Tommy Leunen <tommy.leunen@gmail.com> (http://tommyleunen.com/)",
+  "author": {
+    "name": "Tommy Leunen",
+    "email": "tommy.leunen@gmail.com",
+    "url": "http://tommyleunen.com/"
+  },
   "license": "MIT",
   "dependencies": {
     "clamp": "^1.0.1",
-    "react": "^0.11.2",
+    "react": "^0.12.0",
     "react-clickdrag-mixin": "^1.1.0"
   },
   "devDependencies": {
     "brfs": "^1.2.0",
     "insert-css": "^0.2.0",
-    "reactify": "^0.14.0"
+    "reactify": "^0.15.2"
   },
   "scripts": {
     "demo": "beefy demo/index.js --open -- -t reactify -t brfs"
