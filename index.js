@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var ReactClickDragMixin = require('react-clickdrag-mixin');
 var clamp = require('clamp');
@@ -156,16 +156,16 @@ var NumberEditor = React.createClass({
     },
 
     render: function() {
-        var cursor = "ew-resize";
+        var cursor = 'ew-resize';
         var readOnly = true;
         if(this.state.startEditing) {
-            cursor = "auto";
+            cursor = 'auto';
             readOnly = false;
         }
 
-        document.body.style.cursor = (this.state.startDragging) ? "ew-resize" : "auto";
+        document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
 
-        return React.DOM.input({
+        return React.createElement('input', {
             type: 'text',
             className: this.props.className,
             readOnly: readOnly,
