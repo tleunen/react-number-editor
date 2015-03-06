@@ -163,7 +163,9 @@ var NumberEditor = React.createClass({
             readOnly = false;
         }
 
-        document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
+        if (this.isMounted()) {
+          document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
+        }
 
         return React.createElement('input', {
             type: 'text',
