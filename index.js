@@ -3,6 +3,7 @@
 var ReactClickDragMixin = require('react-clickdrag-mixin');
 var clamp = require('clamp');
 var React = require('react');
+var objectAssign = require('react/lib/Object.assign');
 
 var KEYS = {
     UP: 38,
@@ -19,6 +20,7 @@ var NumberEditor = React.createClass({
         max: React.PropTypes.number,
         step: React.PropTypes.number,
         stepModifier: React.PropTypes.number,
+        style: React.PropTypes.object,
         decimals: React.PropTypes.number,
         initialValue: React.PropTypes.number,
         className: React.PropTypes.string,
@@ -31,6 +33,7 @@ var NumberEditor = React.createClass({
             max: Number.MAX_VALUE,
             step: 1,
             stepModifier: 10,
+            style: {},
             decimals: 0,
             initialValue: 0,
             className: '',
@@ -146,7 +149,7 @@ var NumberEditor = React.createClass({
             this.setState({
                 wasUsingSpecialKeys: isUsingSpecialKeys,
                 dragStartValue: this.state.value
-            })
+            });
             return;
         }
 
@@ -172,7 +175,7 @@ var NumberEditor = React.createClass({
             className: this.props.className,
             readOnly: readOnly,
             value: this.state.valueStr,
-            style: { cursor: cursor },
+            style: objectAssign(this.props.style, { cursor: cursor }),
             onKeyDown: this._onKeyDown,
             onDoubleClick: this._onDoubleClick,
             onChange: this._onChange,
