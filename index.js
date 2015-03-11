@@ -52,10 +52,6 @@ var NumberEditor = React.createClass({
         };
     },
 
-    componentDidMount: function() {
-        this._changeValue(this.state.value);
-    },
-
     _changeValue: function(value) {
         // Using the formatted value converted as a number assure that value == valueStr (with the right number of decimals)
         var newVal = clamp(Number(value.toFixed(this.props.decimals)), this.props.min, this.props.max);
