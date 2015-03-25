@@ -12,7 +12,6 @@ var KEYS = {
 };
 
 var NumberEditor = React.createClass({
-
     mixins: [ReactClickDragMixin],
 
     propTypes: {
@@ -66,10 +65,12 @@ var NumberEditor = React.createClass({
     },
 
     _getStepValue: function(e, step) {
-        if(e.metaKey || e.ctrlKey)
+        if(e.metaKey || e.ctrlKey) {
             step /= this.props.stepModifier;
-        else if(e.shiftKey)
+        }
+        else if(e.shiftKey) {
             step *= this.props.stepModifier;
+        }
 
         return step;
     },
@@ -80,15 +81,15 @@ var NumberEditor = React.createClass({
         var value = this.state.value;
         var key = e.which;
 
-        if(key == KEYS.UP) {
+        if(key === KEYS.UP) {
             e.preventDefault();
             this._changeValue(value + step);
         }
-        else if(key == KEYS.DOWN) {
+        else if(key === KEYS.DOWN) {
             e.preventDefault();
             this._changeValue(value - step);
         }
-        else if(key == KEYS.ENTER) {
+        else if(key === KEYS.ENTER) {
             if(this.state.startEditing) {
                 // stop editing + save value
                 this._onBlur();
@@ -101,7 +102,7 @@ var NumberEditor = React.createClass({
         }
     },
 
-    _onDoubleClick: function(e) {
+    _onDoubleClick: function(/*e*/) {
         this.setState({
             startEditing: true
         });
@@ -114,7 +115,7 @@ var NumberEditor = React.createClass({
         });
     },
 
-    _onBlur: function(e) {
+    _onBlur: function(/*e*/) {
         // valueStr could have changed by _onChange, so we force to update the value
         this._changeValue(Number(this.state.valueStr));
 
@@ -123,7 +124,7 @@ var NumberEditor = React.createClass({
         });
     },
 
-    _onDragStart: function(e, pos) {
+    _onDragStart: function(/*e, pos*/) {
         this.setState({
             startDragging: true,
             dragStartValue: this.state.value
@@ -140,7 +141,7 @@ var NumberEditor = React.createClass({
         // If a special key is used and wasn't use before,
         // we have to set the new Mouse Position and new Drag Start value
         var isUsingSpecialKeys = e.metaKey || e.ctrlKey || e.shiftKey;
-        if(isUsingSpecialKeys != this.state.wasUsingSpecialKeys) {
+        if(isUsingSpecialKeys !== this.state.wasUsingSpecialKeys) {
             this.setMousePosition(e.clientX, e.clientY);
             this.setState({
                 wasUsingSpecialKeys: isUsingSpecialKeys,
@@ -162,9 +163,9 @@ var NumberEditor = React.createClass({
             readOnly = false;
         }
 
-        if (this.isMounted()) {
-          document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
-        }
+        // if (this.isMounted()) {
+        //   document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
+        // }
 
         return React.createElement('input', {
             type: 'text',
