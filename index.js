@@ -1,6 +1,6 @@
 'use strict';
 
-var clickDrag = require('react-clickdrag-mixin')
+var clickDrag = require('react-clickdrag')
 var clamp = require('clamp');
 var React = require('react');
 var objectAssign = require('react/lib/Object.assign');
