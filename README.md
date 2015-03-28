@@ -51,7 +51,7 @@ Then:
 
 ## License
 
-MIT, see [LICENSE.md](http://github.com/tleunen/react-number-editor/blob/master/LICENSE.md) for details.
+MIT, see [LICENSE.md](/LICENSE.md) for details.
 
 ## Thanks
 

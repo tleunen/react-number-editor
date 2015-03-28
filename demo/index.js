@@ -11,7 +11,11 @@ function logValue(value) {
 }
 
 
+var container = document.createElement('div');
+document.body.appendChild(container);
+
+
 React.render(
     <NumberEditor className="spinner" min={0} max={1} step={0.01} decimals={2} onValueChange={logValue} />,
-    document.body
+    container
 );

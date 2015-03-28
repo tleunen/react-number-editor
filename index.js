@@ -1,6 +1,6 @@
 'use strict';
 
-var ReactClickDragMixin = require('react-clickdrag-mixin');
+var clickDrag = require('react-clickdrag-mixin')
 var clamp = require('clamp');
 var React = require('react');
 var objectAssign = require('react/lib/Object.assign');
@@ -12,8 +12,6 @@ var KEYS = {
 };
 
 var NumberEditor = React.createClass({
-    mixins: [ReactClickDragMixin],
-
     propTypes: {
         min: React.PropTypes.number,
         max: React.PropTypes.number,
@@ -43,12 +41,26 @@ var NumberEditor = React.createClass({
     getInitialState: function() {
         return {
             startEditing: false,
-            startDragging: false,
             wasUsingSpecialKeys: false,
             value: this.props.initialValue,
             valueStr: String(this.props.initialValue),
             dragStartValue: this.props.initialValue
         };
+    },
+
+    componentWillReceiveProps: function(nextProps) {
+        // start
+        if(nextProps.dataDrag.isMouseDown && !nextProps.dataDrag.isMoving) {
+            this.setState({
+                dragStartValue: this.state.value
+            });
+        }
+
+        if(nextProps.dataDrag.isMoving) {
+            var step = this._getStepValue(nextProps.dataDrag, this.props.step);
+            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step/2));
+        }
+
     },
 
     _changeValue: function(value) {
@@ -124,37 +136,6 @@ var NumberEditor = React.createClass({
         });
     },
 
-    _onDragStart: function(/*e, pos*/) {
-        this.setState({
-            startDragging: true,
-            dragStartValue: this.state.value
-        });
-    },
-    _onDragStop: function() {
-        this.setState({
-            startDragging: false
-        });
-    },
-    _onDragMove: function(e, deltaPos) {
-        e.preventDefault();
-
-        // If a special key is used and wasn't use before,
-        // we have to set the new Mouse Position and new Drag Start value
-        var isUsingSpecialKeys = e.metaKey || e.ctrlKey || e.shiftKey;
-        if(isUsingSpecialKeys !== this.state.wasUsingSpecialKeys) {
-            this.setMousePosition(e.clientX, e.clientY);
-            this.setState({
-                wasUsingSpecialKeys: isUsingSpecialKeys,
-                dragStartValue: this.state.value
-            });
-            return;
-        }
-
-
-        var step = this._getStepValue(e, this.props.step);
-        this._changeValue(this.state.dragStartValue + deltaPos.x * (step/2));
-    },
-
     render: function() {
         var cursor = 'ew-resize';
         var readOnly = true;
@@ -162,10 +143,6 @@ var NumberEditor = React.createClass({
             cursor = 'auto';
             readOnly = false;
         }
-
-        // if (this.isMounted()) {
-        //   document.body.style.cursor = (this.state.startDragging) ? 'ew-resize' : 'auto';
-        // }
 
         return React.createElement('input', {
             type: 'text',
@@ -181,4 +158,16 @@ var NumberEditor = React.createClass({
     }
 });
 
-module.exports = NumberEditor;
+module.exports = clickDrag(NumberEditor, {
+    resetOnSpecialKeys: true,
+    getSpecificEventData: function(e) {
+        return {
+            metaKey: e.metaKey,
+            ctrlKey: e.ctrlKey,
+            shiftKey: e.shiftKey
+        };
+    },
+    onDragMove: function(e) {
+        e.preventDefault();
+    }
+});
