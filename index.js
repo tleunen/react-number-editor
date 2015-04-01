@@ -1,6 +1,6 @@
 'use strict';
 
-var clickDrag = require('react-clickdrag')
+var clickDrag = require('react-clickdrag');
 var clamp = require('clamp');
 var React = require('react');
 var objectAssign = require('react/lib/Object.assign');
@@ -58,7 +58,7 @@ var NumberEditor = React.createClass({
 
         if(nextProps.dataDrag.isMoving) {
             var step = this._getStepValue(nextProps.dataDrag, this.props.step);
-            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step/2));
+            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
         }
 
     },

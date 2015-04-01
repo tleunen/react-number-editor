@@ -28,13 +28,15 @@
   "license": "MIT",
   "dependencies": {
     "clamp": "^1.0.1",
-    "react": "^0.13.1",
     "react-clickdrag": "^2.0.0"
   },
   "devDependencies": {
     "brfs": "^1.4.0",
     "insert-css": "^0.2.0",
     "babelify": "^5.0.4"
+  },
+  "peerDependencies": {
+    "react": ">=0.13"
   },
   "scripts": {
     "demo": "beefy demo/index.js --open -- -t babelify -t brfs"
