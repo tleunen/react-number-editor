@@ -160,6 +160,7 @@ var NumberEditor = React.createClass({
 
 module.exports = clickDrag(NumberEditor, {
     resetOnSpecialKeys: true,
+    touch: true,
     getSpecificEventData: function(e) {
         return {
             metaKey: e.metaKey,
