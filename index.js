@@ -21,7 +21,10 @@ var NumberEditor = React.createClass({
         step: React.PropTypes.number,
         stepModifier: React.PropTypes.number,
         style: React.PropTypes.object,
-        value: React.PropTypes.number.isRequired
+        value: React.PropTypes.oneOfType([
+          React.PropTypes.string,
+          React.PropTypes.number
+        ]).isRequired
     },
 
     getDefaultProps: function() {
@@ -40,6 +43,7 @@ var NumberEditor = React.createClass({
     getInitialState: function() {
         return {
             startEditing: false,
+            doneEditing: true,
             wasUsingSpecialKeys: false,
             valueStr: this.props.value.toFixed(this.props.decimals),
             dragStartValue: this.props.value
@@ -63,11 +67,6 @@ var NumberEditor = React.createClass({
     _changeValue: function(value) {
         // Using the formatted value converted as a number assure that value == valueStr (with the right number of decimals)
         var newVal = clamp(Number(value.toFixed(this.props.decimals)), this.props.min, this.props.max);
-        var formattedValue = newVal.toFixed(this.props.decimals);
-
-        this.setState({
-            valueStr: formattedValue
-        });
 
         if(this.props.value !== newVal) {
             this.props.onValueChange(newVal);
@@ -120,15 +119,14 @@ var NumberEditor = React.createClass({
 
     _onChange: function(e) {
         // Update only valueStr to get the right display during editing
-        this.setState({
-            valueStr: e.target.value
-        });
+        this.props.onValueChange(Number(e.target.value).toFixed(this.props.decimals))
+
     },
 
-    _onBlur: function(/*e*/) {
+    _onBlur: function(e) {
         // valueStr could have changed by _onChange, so we force to update the value
-        this._changeValue(Number(this.state.valueStr));
-
+        var num = Number(e.target.value)
+        this.props.onValueChange(num.toFixed(this.props.decimals))
         this.setState({
             startEditing: false
         });
@@ -137,16 +135,21 @@ var NumberEditor = React.createClass({
     render: function() {
         var cursor = 'ew-resize';
         var readOnly = true;
+        var value = Number(this.props.value)
         if(this.state.startEditing) {
             cursor = 'auto';
             readOnly = false;
+        }
+
+        if(!this.state.startEditing) {
+            value = value.toFixed(this.props.decimals);
         }
 
         return React.createElement('input', {
             type: 'text',
             className: this.props.className,
             readOnly: readOnly,
-            value: this.state.valueStr,
+            value: value,
             style: objectAssign(this.props.style, { cursor: cursor }),
             onKeyDown: this._onKeyDown,
             onDoubleClick: this._onDoubleClick,
