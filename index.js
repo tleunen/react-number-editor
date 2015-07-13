@@ -45,7 +45,6 @@ var NumberEditor = React.createClass({
             startEditing: false,
             doneEditing: true,
             wasUsingSpecialKeys: false,
-            valueStr: this.props.value.toFixed(this.props.decimals),
             dragStartValue: this.props.value
         };
     },
@@ -65,7 +64,6 @@ var NumberEditor = React.createClass({
     },
 
     _changeValue: function(value) {
-        // Using the formatted value converted as a number assure that value == valueStr (with the right number of decimals)
         var newVal = clamp(Number(value.toFixed(this.props.decimals)), this.props.min, this.props.max);
 
         if(this.props.value !== newVal) {
@@ -87,7 +85,7 @@ var NumberEditor = React.createClass({
     _onKeyDown: function(e) {
         var step = this._getStepValue(e, this.props.step);
 
-        var value = this.state.value;
+        var value = this.props.value;
         var key = e.which;
 
         if(key === KEYS.UP) {
