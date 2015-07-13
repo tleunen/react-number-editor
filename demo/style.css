@@ -8,7 +8,5 @@ html, body { height: 100%; }
 	font-weight: bold;
 	border-bottom: 1px dotted #393939;
 
-	position: absolute;
-	top: 20px;
-	left: 20px;
+    margin: 20px;
 }
