@@ -45,7 +45,7 @@ var NumberEditor = React.createClass({
             startEditing: false,
             doneEditing: true,
             wasUsingSpecialKeys: false,
-            dragStartValue: this.props.value
+            dragStartValue: Number(this.props.value)
         };
     },
 
@@ -59,12 +59,13 @@ var NumberEditor = React.createClass({
 
         if(nextProps.dataDrag.isMoving) {
             var step = this._getStepValue(nextProps.dataDrag, this.props.step);
-            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
+            this._changeValue(Number(this.state.dragStartValue) + nextProps.dataDrag.moveDeltaX * (step / 2));
         }
     },
 
+
     _changeValue: function(value) {
-        var newVal = clamp(Number(value.toFixed(this.props.decimals)), this.props.min, this.props.max);
+        var newVal = clamp(Number(value).toFixed(this.props.decimals), this.props.min, this.props.max);
 
         if(this.props.value !== newVal) {
             this.props.onValueChange(newVal);
@@ -116,7 +117,6 @@ var NumberEditor = React.createClass({
     },
 
     _onChange: function(e) {
-        // Update only valueStr to get the right display during editing
         var val = Number(e.target.value);
         if(!isNaN(val)){
           this.props.onValueChange(val.toFixed(this.props.decimals))
@@ -124,7 +124,6 @@ var NumberEditor = React.createClass({
     },
 
     _onBlur: function(e) {
-        // valueStr could have changed by _onChange, so we force to update the value
         var num = Number(e.target.value)
         this.props.onValueChange(num.toFixed(this.props.decimals))
         this.setState({
