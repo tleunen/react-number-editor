@@ -119,8 +119,10 @@ var NumberEditor = React.createClass({
 
     _onChange: function(e) {
         // Update only valueStr to get the right display during editing
-        this.props.onValueChange(Number(e.target.value).toFixed(this.props.decimals))
-
+        var val = Number(e.target.value);
+        if(!isNaN(val)){
+          this.props.onValueChange(val.toFixed(this.props.decimals))
+        }
     },
 
     _onBlur: function(e) {
