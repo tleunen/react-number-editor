@@ -43,7 +43,6 @@ var NumberEditor = React.createClass({
     getInitialState: function() {
         return {
             startEditing: false,
-            doneEditing: true,
             wasUsingSpecialKeys: false,
             dragStartValue: Number(this.props.value)
         };
@@ -53,19 +52,19 @@ var NumberEditor = React.createClass({
         // start
         if(nextProps.dataDrag.isMouseDown && !nextProps.dataDrag.isMoving) {
             this.setState({
-                dragStartValue: this.props.value
+                dragStartValue: Number(this.props.value)
             });
         }
 
         if(nextProps.dataDrag.isMoving) {
             var step = this._getStepValue(nextProps.dataDrag, this.props.step);
-            this._changeValue(Number(this.state.dragStartValue) + nextProps.dataDrag.moveDeltaX * (step / 2));
+            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
         }
     },
 
 
     _changeValue: function(value) {
-        var newVal = clamp(Number(value).toFixed(this.props.decimals), this.props.min, this.props.max);
+        var newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
 
         if(this.props.value !== newVal) {
             this.props.onValueChange(newVal);
@@ -117,15 +116,11 @@ var NumberEditor = React.createClass({
     },
 
     _onChange: function(e) {
-        var val = Number(e.target.value);
-        if(!isNaN(val)){
-          this.props.onValueChange(val.toFixed(this.props.decimals))
-        }
+        this.props.onValueChange(e.target.value);
     },
 
     _onBlur: function(e) {
-        var num = Number(e.target.value)
-        this.props.onValueChange(num.toFixed(this.props.decimals))
+        this._changeValue(Number(e.target.value));
         this.setState({
             startEditing: false
         });
@@ -134,14 +129,14 @@ var NumberEditor = React.createClass({
     render: function() {
         var cursor = 'ew-resize';
         var readOnly = true;
-        var value = Number(this.props.value)
+        var value = this.props.value;
         if(this.state.startEditing) {
             cursor = 'auto';
             readOnly = false;
         }
 
         if(!this.state.startEditing) {
-            value = value.toFixed(this.props.decimals);
+            value = Number(value).toFixed(this.props.decimals);
         }
 
         return React.createElement('input', {
