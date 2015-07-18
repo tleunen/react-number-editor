@@ -29,10 +29,11 @@ class Demo extends React.Component {
             <div>
                 <NumberEditor
                     className="spinner"
-                    max={1000}
+                    max={10}
                     min={0}
+                    decimals={2}
                     onValueChange={this._onNumberChange}
-                    step={1}
+                    step={0.1}
                     value={this.state.numberValue}
                 />
                 <div>Value: {this.state.numberValue}</div>
