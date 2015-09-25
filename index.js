@@ -97,9 +97,10 @@ var NumberEditor = React.createClass({
             this._changeValue(value - step);
         }
         else if(key === KEYS.ENTER) {
+            e.preventDefault();
             if(this.state.startEditing) {
                 // stop editing + save value
-                this._onBlur();
+                this._onBlur(e);
             }
             else {
                 this.setState({
