@@ -85,7 +85,7 @@ var NumberEditor = React.createClass({
     _onKeyDown: function(e) {
         var step = this._getStepValue(e, this.props.step);
 
-        var value = this.props.value;
+        var value = Number(this.props.value);
         var key = e.which;
 
         if(key === KEYS.UP) {
