@@ -38,6 +38,7 @@ Here are the list of properties available for the component:
 - `initialValue` (number) the default value to show. Default 0.
 - `className` (string) the class name to apply to the DOM element. Default empty.
 - `onValueChange` (function) The callback when the value changes. The value is passed as the parameter.
+-  onKeyDown (function) This callback is called when a key is pressed, after the control has processed the key press, and allows developers to implement their own shortcuts, etc.
 
 ## demo
 
