@@ -31,9 +31,10 @@
     "react-clickdrag": "^2.0.0"
   },
   "devDependencies": {
+    "babelify": "^5.0.4",
     "brfs": "^1.4.0",
-    "insert-css": "^0.2.0",
-    "babelify": "^5.0.4"
+    "browserify": "^11.2.0",
+    "insert-css": "^0.2.0"
   },
   "peerDependencies": {
     "react": ">=0.13"

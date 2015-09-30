@@ -8,8 +8,36 @@ var objectAssign = require('react/lib/Object.assign');
 var KEYS = {
     UP: 38,
     DOWN: 40,
-    ENTER: 13
+    ENTER: 13,
+    BACKSPACE: 8
 };
+
+// Allowed keys in the number editor:
+//   - Backspace
+//   - Tab
+//   - End
+//   - Home
+//   - Left Arrow
+//   - Right Arrow
+//   - Delete
+//   - 0 - 9
+//   - . (Dot)
+//   - - (Minus) [Multiple values across different browsers]
+//   - Numpad 0-9
+//   - Numpad - (Minus)
+var ALLOWED_KEYS = [8,
+                    9,
+                    35,
+                    36,
+                    37,
+                    39,
+                    46,
+                    48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+                    190,
+                    189, 173,
+                    96, 97, 98, 99, 100, 101, 102, 103, 104, 105,
+                    109
+];
 
 var NumberEditor = React.createClass({
     propTypes: {
@@ -24,7 +52,8 @@ var NumberEditor = React.createClass({
         value: React.PropTypes.oneOfType([
           React.PropTypes.string,
           React.PropTypes.number
-        ]).isRequired
+        ]).isRequired,
+        onKeyDown: React.PropTypes.func
     },
 
     getDefaultProps: function() {
@@ -106,7 +135,19 @@ var NumberEditor = React.createClass({
                 this.setState({
                     startEditing: true
                 });
+                e.target.select();
             }
+        }
+        else if(key === KEYS.BACKSPACE && !this.state.startEditing) {
+            e.preventDefault();
+        }
+        else if(ALLOWED_KEYS.indexOf(key) === -1) {
+            // Suppress any key we are not allowing.
+            e.preventDefault();
+        }
+
+        if(this.props.onKeyDown) {
+            this.props.onKeyDown(e);
         }
     },
 
