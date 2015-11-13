@@ -1,11 +1,9 @@
 'use strict';
 
-var React = require('react');
-var NumberEditor = require('../');
-
-var fs = require('fs');
-var style = fs.readFileSync(__dirname+'/style.css', 'utf8');
-require('insert-css')(style);
+import React from 'react';
+import { render } from 'react-dom';
+import NumberEditor from '../';
+require("./style.css");
 
 var KEYS = {
     K: 75,
@@ -62,5 +60,4 @@ class Demo extends React.Component {
 
 var container = document.createElement('div');
 document.body.appendChild(container);
-
-React.render(<Demo />, container);
+render(<Demo />, container);
