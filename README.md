@@ -42,12 +42,7 @@ Here are the list of properties available for the component:
 
 ## demo
 
-To run the demo, install beefy and browserify:
-
-`npm i beefy browserify -g`
-
-Then:
-
+To run the demo, executes this command and go to `http://localhost:8080`:
 `npm run demo`
 
 ## License
