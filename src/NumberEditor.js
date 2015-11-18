@@ -24,7 +24,8 @@ const ALLOWED_KEYS = [
     190, // (Dot)
     189, 173, // (Minus) - [Multiple values across different browsers]
     96, 97, 98, 99, 100, 101, 102, 103, 104, 105, // Numpad 0-9
-    109 // Numpad - (Minus)
+    109, // Numpad - (Minus)
+    110 // Numpad . (Decimal point)
 ];
 
 class NumberEditor extends React.Component {
