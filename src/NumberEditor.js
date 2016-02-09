@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { PropTypes } from 'react';
 import clickDrag from 'react-clickdrag';
 import clamp from 'clamp';
@@ -39,8 +37,8 @@ class NumberEditor extends React.Component {
         stepModifier: PropTypes.number,
         style: PropTypes.object,
         value: PropTypes.oneOfType([
-          PropTypes.string,
-          PropTypes.number
+            PropTypes.string,
+            PropTypes.number
         ]).isRequired,
         onKeyDown: PropTypes.func
     }
@@ -50,7 +48,9 @@ class NumberEditor extends React.Component {
         decimals: 0,
         max: Number.MAX_VALUE,
         min: -Number.MAX_VALUE,
-        onValueChange: function() {},
+        onValueChange: () => {
+            // do nothing
+        },
         step: 1,
         stepModifier: 10,
         style: {}
@@ -68,7 +68,7 @@ class NumberEditor extends React.Component {
             startEditing: false,
             wasUsingSpecialKeys: false,
             dragStartValue: Number(this.props.value)
-        }
+        };
     }
 
     componentWillReceiveProps(nextProps) {
@@ -80,13 +80,13 @@ class NumberEditor extends React.Component {
         }
 
         if(nextProps.dataDrag.isMoving) {
-            var step = this._getStepValue(nextProps.dataDrag, this.props.step);
+            const step = this._getStepValue(nextProps.dataDrag, this.props.step);
             this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
         }
     }
 
     _changeValue(value) {
-        var newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
+        const newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
 
         if(this.props.value !== newVal) {
             this.props.onValueChange(newVal);
@@ -94,21 +94,22 @@ class NumberEditor extends React.Component {
     }
 
     _getStepValue(e, step) {
+        let newStep = step;
         if(e.metaKey || e.ctrlKey) {
-            step /= this.props.stepModifier;
+            newStep /= this.props.stepModifier;
         }
         else if(e.shiftKey) {
-            step *= this.props.stepModifier;
+            newStep *= this.props.stepModifier;
         }
 
-        return step;
+        return newStep;
     }
 
     _onKeyDown(e) {
-        var step = this._getStepValue(e, this.props.step);
+        const step = this._getStepValue(e, this.props.step);
 
-        var value = Number(this.props.value);
-        var key = e.which;
+        const value = Number(this.props.value);
+        const key = e.which;
 
         if(key === KEYS.UP) {
             e.preventDefault();
@@ -162,9 +163,9 @@ class NumberEditor extends React.Component {
     }
 
     render() {
-        var cursor = 'ew-resize';
-        var readOnly = true;
-        var value = this.props.value;
+        let cursor = 'ew-resize';
+        let readOnly = true;
+        let value = this.props.value;
         if(this.state.startEditing) {
             cursor = 'auto';
             readOnly = false;
@@ -180,7 +181,7 @@ class NumberEditor extends React.Component {
                 className={this.props.className}
                 readOnly={readOnly}
                 value={value}
-                style={objectAssign(this.props.style, { cursor: cursor })}
+                style={objectAssign(this.props.style, { cursor })}
                 onKeyDown={this._onKeyDown}
                 onDoubleClick={this._onDoubleClick}
                 onChange={this._onChange}
@@ -193,14 +194,12 @@ class NumberEditor extends React.Component {
 module.exports = clickDrag(NumberEditor, {
     resetOnSpecialKeys: true,
     touch: true,
-    getSpecificEventData: function(e) {
-        return {
-            metaKey: e.metaKey,
-            ctrlKey: e.ctrlKey,
-            shiftKey: e.shiftKey
-        };
-    },
-    onDragMove: function(e) {
+    getSpecificEventData: (e) => ({
+        metaKey: e.metaKey,
+        ctrlKey: e.ctrlKey,
+        shiftKey: e.shiftKey
+    }),
+    onDragMove: (e) => {
         e.preventDefault();
     }
 });
