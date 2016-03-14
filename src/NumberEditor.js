@@ -88,7 +88,7 @@ class NumberEditor extends React.Component {
     _changeValue(value) {
         const newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
 
-        if(this.props.value !== newVal) {
+        if(Number(this.props.value) !== Number(newVal)) {
             this.props.onValueChange(newVal);
         }
     }
