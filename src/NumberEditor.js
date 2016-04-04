@@ -86,7 +86,7 @@ class NumberEditor extends React.Component {
             if(this.props.orientation === 'horizontal') {
               this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
             }
-            else {
+            else if(this.props.orientation === 'vertical') {
               this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaY * (step / 2));
             }
         }
