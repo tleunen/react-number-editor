@@ -67,7 +67,7 @@ class NumberEditor extends React.Component {
         this.state = {
             startEditing: false,
             wasUsingSpecialKeys: false,
-            dragStartValue: Number(this.props.value)
+            dragStartValue: Number(props.value)
         };
     }
 
