@@ -32,6 +32,7 @@ class NumberEditor extends React.Component {
         decimals: PropTypes.number,
         max: PropTypes.number,
         min: PropTypes.number,
+        orientation: PropTypes.string,
         onValueChange: PropTypes.func,
         step: PropTypes.number,
         stepModifier: PropTypes.number,
@@ -48,6 +49,7 @@ class NumberEditor extends React.Component {
         decimals: 0,
         max: Number.MAX_VALUE,
         min: -Number.MAX_VALUE,
+        orientation: 'horizontal',
         onValueChange: () => {
             // do nothing
         },
@@ -81,7 +83,12 @@ class NumberEditor extends React.Component {
 
         if(nextProps.dataDrag.isMoving) {
             const step = this._getStepValue(nextProps.dataDrag, this.props.step);
-            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
+            if(this.props.orientation === 'horizontal') {
+              this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
+            }
+            else if(this.props.orientation === 'vertical') {
+              this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaY * (step / 2));
+            }
         }
     }
 
@@ -163,7 +170,7 @@ class NumberEditor extends React.Component {
     }
 
     render() {
-        let cursor = 'ew-resize';
+        let cursor = this.props.orientation === 'horizontal' ? 'ew-resize' : 'ns-resize';
         let readOnly = true;
         let value = this.props.value;
         if(this.state.startEditing) {

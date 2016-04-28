@@ -35,6 +35,7 @@ class Demo extends React.Component {
                     max={10000}
                     min={-10}
                     decimals={2}
+                    orientation="horizontal"
                     onValueChange={this._onNumberChange}
                     step={0.1}
                     value={this.state.numberValue}
