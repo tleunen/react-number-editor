@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import clickDrag from 'react-clickdrag';
 import clamp from 'clamp';
-import objectAssign from 'react/lib/Object.assign';
 
 const KEYS = {
     UP: 38,
@@ -26,43 +25,43 @@ const ALLOWED_KEYS = [
     110 // Numpad . (Decimal point)
 ];
 
+const propTypes = {
+    className: PropTypes.string,
+    decimals: PropTypes.number,
+    max: PropTypes.number,
+    min: PropTypes.number,
+    onValueChange: PropTypes.func,
+    step: PropTypes.number,
+    stepModifier: PropTypes.number,
+    style: PropTypes.object,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]).isRequired,
+    onKeyDown: PropTypes.func
+};
+
+const defaultProps = {
+    className: '',
+    decimals: 0,
+    max: Number.MAX_VALUE,
+    min: -Number.MAX_VALUE,
+    onValueChange: () => {
+        // do nothing
+    },
+    step: 1,
+    stepModifier: 10,
+    style: {}
+};
+
 class NumberEditor extends React.Component {
-    static propTypes = {
-        className: PropTypes.string,
-        decimals: PropTypes.number,
-        max: PropTypes.number,
-        min: PropTypes.number,
-        onValueChange: PropTypes.func,
-        step: PropTypes.number,
-        stepModifier: PropTypes.number,
-        style: PropTypes.object,
-        value: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]).isRequired,
-        onKeyDown: PropTypes.func
-    };
-
-    static defaultProps = {
-        className: '',
-        decimals: 0,
-        max: Number.MAX_VALUE,
-        min: -Number.MAX_VALUE,
-        onValueChange: () => {
-            // do nothing
-        },
-        step: 1,
-        stepModifier: 10,
-        style: {}
-    };
-
     constructor(props) {
         super(props);
 
-        this._onKeyDown = this._onKeyDown.bind(this);
-        this._onDoubleClick = this._onDoubleClick.bind(this);
-        this._onChange = this._onChange.bind(this);
-        this._onBlur = this._onBlur.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onDoubleClick = this.onDoubleClick.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onBlur = this.onBlur.bind(this);
 
         this.state = {
             startEditing: false,
@@ -73,105 +72,99 @@ class NumberEditor extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         // start
-        if(nextProps.dataDrag.isMouseDown && !nextProps.dataDrag.isMoving) {
+        if (nextProps.dataDrag.isMouseDown && !nextProps.dataDrag.isMoving) {
             this.setState({
                 dragStartValue: Number(this.props.value)
             });
         }
 
-        if(nextProps.dataDrag.isMoving) {
-            const step = this._getStepValue(nextProps.dataDrag, this.props.step);
-            this._changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
+        if (nextProps.dataDrag.isMoving) {
+            const step = this.getStepValue(nextProps.dataDrag, this.props.step);
+            this.changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
         }
     }
 
-    _changeValue(value) {
-        const newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
+    onDoubleClick() {
+        this.setState({
+            startEditing: true
+        });
+    }
 
-        if(Number(this.props.value) !== Number(newVal)) {
-            this.props.onValueChange(newVal);
+    onChange(e) {
+        this.props.onValueChange(e.target.value);
+    }
+
+    onBlur(e) {
+        this.changeValue(Number(e.target.value));
+        this.setState({
+            startEditing: false
+        });
+    }
+
+    onKeyDown(e) {
+        const step = this.getStepValue(e, this.props.step);
+
+        const value = Number(this.props.value);
+        const key = e.which;
+
+        if (key === KEYS.UP) {
+            e.preventDefault();
+            this.changeValue(value + step);
+        } else if (key === KEYS.DOWN) {
+            e.preventDefault();
+            this.changeValue(value - step);
+        } else if (key === KEYS.ENTER) {
+            e.preventDefault();
+            if (this.state.startEditing) {
+                // stop editing + save value
+                this.onBlur(e);
+            } else {
+                this.setState({
+                    startEditing: true
+                });
+                e.target.select();
+            }
+        } else if (key === KEYS.BACKSPACE && !this.state.startEditing) {
+            e.preventDefault();
+        } else if (ALLOWED_KEYS.indexOf(key) === -1) {
+            // Suppress any key we are not allowing.
+            e.preventDefault();
+        }
+
+        if (this.props.onKeyDown) {
+            this.props.onKeyDown(e);
         }
     }
 
-    _getStepValue(e, step) {
+    getStepValue(e, step) {
         let newStep = step;
-        if(e.metaKey || e.ctrlKey) {
+        if (e.metaKey || e.ctrlKey) {
             newStep /= this.props.stepModifier;
-        }
-        else if(e.shiftKey) {
+        } else if (e.shiftKey) {
             newStep *= this.props.stepModifier;
         }
 
         return newStep;
     }
 
-    _onKeyDown(e) {
-        const step = this._getStepValue(e, this.props.step);
+    changeValue(value) {
+        const newVal = clamp(value.toFixed(this.props.decimals), this.props.min, this.props.max);
 
-        const value = Number(this.props.value);
-        const key = e.which;
-
-        if(key === KEYS.UP) {
-            e.preventDefault();
-            this._changeValue(value + step);
+        if (Number(this.props.value) !== Number(newVal)) {
+            this.props.onValueChange(newVal);
         }
-        else if(key === KEYS.DOWN) {
-            e.preventDefault();
-            this._changeValue(value - step);
-        }
-        else if(key === KEYS.ENTER) {
-            e.preventDefault();
-            if(this.state.startEditing) {
-                // stop editing + save value
-                this._onBlur(e);
-            }
-            else {
-                this.setState({
-                    startEditing: true
-                });
-                e.target.select();
-            }
-        }
-        else if(key === KEYS.BACKSPACE && !this.state.startEditing) {
-            e.preventDefault();
-        }
-        else if(ALLOWED_KEYS.indexOf(key) === -1) {
-            // Suppress any key we are not allowing.
-            e.preventDefault();
-        }
-
-        if(this.props.onKeyDown) {
-            this.props.onKeyDown(e);
-        }
-    }
-
-    _onDoubleClick() {
-        this.setState({
-            startEditing: true
-        });
-    }
-
-    _onChange(e) {
-        this.props.onValueChange(e.target.value);
-    }
-
-    _onBlur(e) {
-        this._changeValue(Number(e.target.value));
-        this.setState({
-            startEditing: false
-        });
     }
 
     render() {
         let cursor = 'ew-resize';
         let readOnly = true;
         let value = this.props.value;
-        if(this.state.startEditing) {
+        if (this.state.startEditing) {
             cursor = 'auto';
             readOnly = false;
         }
 
-        if(!this.state.startEditing) {
+        if (!this.state.startEditing) {
             value = Number(value).toFixed(this.props.decimals);
         }
 
@@ -181,17 +174,20 @@ class NumberEditor extends React.Component {
                 className={this.props.className}
                 readOnly={readOnly}
                 value={value}
-                style={objectAssign(this.props.style, { cursor })}
-                onKeyDown={this._onKeyDown}
-                onDoubleClick={this._onDoubleClick}
-                onChange={this._onChange}
-                onBlur={this._onBlur}
+                style={{ ...this.props.style, cursor }}
+                onKeyDown={this.onKeyDown}
+                onDoubleClick={this.onDoubleClick}
+                onChange={this.onChange}
+                onBlur={this.onBlur}
             />
         );
     }
 }
 
-module.exports = clickDrag(NumberEditor, {
+NumberEditor.propTypes = propTypes;
+NumberEditor.defaultProps = defaultProps;
+
+export default clickDrag(NumberEditor, {
     resetOnSpecialKeys: true,
     touch: true,
     getSpecificEventData: (e) => ({
