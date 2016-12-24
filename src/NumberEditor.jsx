@@ -6,7 +6,7 @@ const KEYS = {
     UP: 38,
     DOWN: 40,
     ENTER: 13,
-    BACKSPACE: 8
+    BACKSPACE: 8,
 };
 
 const ALLOWED_KEYS = [
@@ -22,7 +22,7 @@ const ALLOWED_KEYS = [
     189, 173, // (Minus) - [Multiple values across different browsers]
     96, 97, 98, 99, 100, 101, 102, 103, 104, 105, // Numpad 0-9
     109, // Numpad - (Minus)
-    110 // Numpad . (Decimal point)
+    110, // Numpad . (Decimal point)
 ];
 
 const propTypes = {
@@ -36,9 +36,9 @@ const propTypes = {
     style: PropTypes.object,
     value: PropTypes.oneOfType([
         PropTypes.string,
-        PropTypes.number
+        PropTypes.number,
     ]).isRequired,
-    onKeyDown: PropTypes.func
+    onKeyDown: PropTypes.func,
 };
 
 const defaultProps = {
@@ -51,7 +51,7 @@ const defaultProps = {
     },
     step: 1,
     stepModifier: 10,
-    style: {}
+    style: {},
 };
 
 class NumberEditor extends React.Component {
@@ -66,7 +66,7 @@ class NumberEditor extends React.Component {
         this.state = {
             startEditing: false,
             wasUsingSpecialKeys: false,
-            dragStartValue: Number(props.value)
+            dragStartValue: Number(props.value),
         };
     }
 
@@ -74,19 +74,19 @@ class NumberEditor extends React.Component {
         // start
         if (nextProps.dataDrag.isMouseDown && !nextProps.dataDrag.isMoving) {
             this.setState({
-                dragStartValue: Number(this.props.value)
+                dragStartValue: Number(this.props.value),
             });
         }
 
         if (nextProps.dataDrag.isMoving) {
             const step = this.getStepValue(nextProps.dataDrag, this.props.step);
-            this.changeValue(this.state.dragStartValue + nextProps.dataDrag.moveDeltaX * (step / 2));
+            this.changeValue(this.state.dragStartValue + (nextProps.dataDrag.moveDeltaX * (step / 2)));
         }
     }
 
     onDoubleClick() {
         this.setState({
-            startEditing: true
+            startEditing: true,
         });
     }
 
@@ -97,7 +97,7 @@ class NumberEditor extends React.Component {
     onBlur(e) {
         this.changeValue(Number(e.target.value));
         this.setState({
-            startEditing: false
+            startEditing: false,
         });
     }
 
@@ -120,7 +120,7 @@ class NumberEditor extends React.Component {
                 this.onBlur(e);
             } else {
                 this.setState({
-                    startEditing: true
+                    startEditing: true,
                 });
                 e.target.select();
             }
@@ -190,12 +190,12 @@ NumberEditor.defaultProps = defaultProps;
 export default clickDrag(NumberEditor, {
     resetOnSpecialKeys: true,
     touch: true,
-    getSpecificEventData: (e) => ({
+    getSpecificEventData: e => ({
         metaKey: e.metaKey,
         ctrlKey: e.ctrlKey,
-        shiftKey: e.shiftKey
+        shiftKey: e.shiftKey,
     }),
     onDragMove: (e) => {
         e.preventDefault();
-    }
+    },
 });
